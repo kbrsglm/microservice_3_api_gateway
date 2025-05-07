@@ -1,0 +1,24 @@
+server:
+  port: 8080
+
+  spring:
+    application:
+        name: api_gateway
+    cloud:
+      gateway:
+        routes:
+          # /products/** başlayana tüm istekleri product servşce yönlendirecek
+         - id : product-service  #Benzrsiz bir kimlik tanımladık
+           uri: lb//PRODUCT SERVICE # lb: load balansing  isteklerin nereye yönlendirileceğini belirtir
+           predicates:
+            -Path=/products/** # Belirli  koşullara uyan istekleri yakalar
+
+         - id: order-service
+           uri: lb//ORDER SERVICE
+           predicates:
+             -Path=/orders/**
+
+  eureka:
+    client:
+      service-url:
+        defaultZone: http://localhost:8761/eureka/
